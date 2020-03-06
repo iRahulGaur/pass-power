@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() {
 
         if (checkDrawOverlayPermission()) {
             startService(Intent(context, PowerButtonService::class.java))
+            startService(Intent(context, PowerMenuService::class.java))
         }
 
     }
@@ -50,6 +51,7 @@ class MainActivity : AppCompatActivity() {
         if (requestCode == REQUEST_CODE) {
             if (Settings.canDrawOverlays(this)) {
                 startService(Intent(context, PowerButtonService::class.java))
+                startService(Intent(context, PowerMenuService::class.java))
             }
         }
     }

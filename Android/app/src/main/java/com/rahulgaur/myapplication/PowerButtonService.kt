@@ -18,11 +18,10 @@ import androidx.annotation.Keep
  * Email: rahul.gaur152@gmail.com
  */
 class PowerButtonService : Service() {
+
     override fun onBind(intent: Intent): IBinder? {
         return null
     }
-
-    // todo need to add password popUp and if password is correct show power menu
 
     override fun onCreate() {
         super.onCreate()
