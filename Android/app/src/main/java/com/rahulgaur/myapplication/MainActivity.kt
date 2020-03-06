@@ -1,18 +1,18 @@
 package com.rahulgaur.myapplication
 
-import android.app.Dialog
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
-import android.view.KeyEvent
-import android.view.Window
-import android.widget.TextView
-import android.widget.Toast
+import android.provider.Settings
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var context: Context
-    private var isPass: Boolean = false
+    private val REQUEST_CODE: Int = 10101
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,41 +20,37 @@ class MainActivity : AppCompatActivity() {
 
         context = this
 
+        if (checkDrawOverlayPermission()) {
+            startService(Intent(context, PowerButtonService::class.java))
+        }
+
     }
 
-    override fun onKeyLongPress(keyCode: Int, event: KeyEvent?): Boolean {
-        if (keyCode == KeyEvent.KEYCODE_POWER) {
-            if (!isPass) {
-                val dialog = Dialog(this)
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-                dialog.setCancelable(false)
-                dialog.setContentView(R.layout.layout_passcode_dialog)
+    private fun checkDrawOverlayPermission(): Boolean {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return true
+        }
 
-                val editText = dialog.findViewById<TextView>(R.id.passCodeET)
-                val btn = dialog.findViewById<TextView>(R.id.passCodeBtn)
+        return if (!Settings.canDrawOverlays(context)) {
+            intent = Intent(
+                Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                Uri.parse("package:$packageName")
+            )
 
-                val correctPass = "2222"
-
-                btn.setOnClickListener {
-
-                    val passCode = editText.text.toString()
-
-                    if (passCode == correctPass) {
-                        Toast.makeText(this, "Password is correct", Toast.LENGTH_SHORT).show()
-                        isPass = true
-                    } else {
-                        Toast.makeText(this, "Password is incorrect", Toast.LENGTH_SHORT).show()
-                    }
-                    dialog.show()
-                }
-                return false
-            } else if (isPass) {
-                return super.onKeyLongPress(keyCode, event)
-            } else {
-                return true
-            }
+            startActivityForResult(intent, REQUEST_CODE)
+            false
         } else {
-            return super.onKeyLongPress(keyCode, event)
+            true
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE) {
+            if (Settings.canDrawOverlays(this)) {
+                startService(Intent(context, PowerButtonService::class.java))
+            }
         }
     }
 }

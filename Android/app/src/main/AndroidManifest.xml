@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.rahulgaur.myapplication">
 
-    <uses-permission android:name="android.permission.PREVENT_POWER_KEY"/>
-    
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -21,6 +21,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name=".PowerButtonService"
+            android:enabled="true"
+            android:exported="true"
+            tools:ignore="ExportedService" />
 
     </application>
 
