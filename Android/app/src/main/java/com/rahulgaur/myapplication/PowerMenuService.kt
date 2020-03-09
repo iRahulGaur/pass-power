@@ -20,7 +20,7 @@ class PowerMenuService : AccessibilityService() {
         override fun onReceive(context: Context?, intent: Intent) {
             if (!performGlobalAction(intent.getIntExtra("action", -1))) Toast.makeText(
                 context,
-                "Not supported",
+                "Not supported ",
                 Toast.LENGTH_SHORT
             ).show()
         }

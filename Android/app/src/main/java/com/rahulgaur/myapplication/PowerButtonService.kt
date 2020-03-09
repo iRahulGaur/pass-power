@@ -1,8 +1,11 @@
 package com.rahulgaur.myapplication
 
+import android.accessibilityservice.AccessibilityService
 import android.app.Service
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.PixelFormat
 import android.os.Build
 import android.os.Handler
@@ -11,7 +14,7 @@ import android.util.Log
 import android.view.*
 import android.widget.LinearLayout
 import androidx.annotation.Keep
-
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 
 /**
  * Created by Rahul Gaur on 06,March,2020
@@ -36,6 +39,28 @@ class PowerButtonService : Service() {
                         Handler().postDelayed({
                             //this will close all system dialogs after 2sec
                             sendBroadcast(Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS))
+
+                            Handler().postDelayed({
+                                val component = ComponentName(
+                                    applicationContext,
+                                    PowerMenuService::class.java
+                                )
+                                applicationContext.packageManager
+                                    .setComponentEnabledSetting(
+                                        component, PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                                        PackageManager.DONT_KILL_APP
+                                    )
+
+                                val intent =
+                                    Intent("com.rahulgaur.myapplication.ACCESSIBILITY_ACTION")
+                                intent.putExtra(
+                                    "action",
+                                    AccessibilityService.GLOBAL_ACTION_POWER_DIALOG
+                                )
+                                LocalBroadcastManager.getInstance(applicationContext)
+                                    .sendBroadcast(intent)
+                            }, 2000)
+
                         }, 2000)
                     }
                     "homekey" -> {
