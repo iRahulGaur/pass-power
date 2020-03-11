@@ -1,4 +1,4 @@
-package com.rahulgaur.myapplication
+package com.rahulgaur.myapplication.home
 
 import android.content.Context
 import android.content.Intent
@@ -8,6 +8,8 @@ import android.os.Bundle
 import android.provider.Settings
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.rahulgaur.myapplication.R
+import com.rahulgaur.myapplication.service.PowerButtonService
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,7 +25,6 @@ class MainActivity : AppCompatActivity() {
         if (checkDrawOverlayPermission()) {
             startService(Intent(context, PowerButtonService::class.java))
         }
-
     }
 
     private fun checkDrawOverlayPermission(): Boolean {

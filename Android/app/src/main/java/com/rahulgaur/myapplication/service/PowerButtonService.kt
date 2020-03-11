@@ -1,4 +1,4 @@
-package com.rahulgaur.myapplication
+package com.rahulgaur.myapplication.service
 
 import android.app.Instrumentation
 import android.app.Service
@@ -12,6 +12,7 @@ import android.util.Log
 import android.view.*
 import android.widget.LinearLayout
 import androidx.annotation.Keep
+import com.rahulgaur.myapplication.R
 
 /**
  * Created by Rahul Gaur on 06,March,2020
@@ -39,6 +40,9 @@ class PowerButtonService : Service() {
 
                             Handler().postDelayed({
                                 simulateKey(KeyEvent.KEYCODE_POWER)
+                                simulateKey(KeyEvent.KEYCODE_POWER)
+                                simulateKey(KeyEvent.KEYCODE_POWER)
+                                simulateKey(KeyEvent.KEYCODE_POWER)
                             }, 2000)
 
                         }, 2000)
@@ -65,6 +69,7 @@ class PowerButtonService : Service() {
                 return super.dispatchKeyEvent(event)
             }
         }
+
         mLinear.isFocusable = true
         val mView: View = LayoutInflater.from(this).inflate(R.layout.layout_service, mLinear)
         val wm =
@@ -98,12 +103,13 @@ class PowerButtonService : Service() {
         wm.addView(mView, params)
     }
 
-    fun simulateKey(KeyCode: Int) {
+    fun simulateKey(keyCode: Int) {
         object : Thread() {
             override fun run() {
                 try {
+                    Log.e("PowerButtonService", "run: inside simulate key $keyCode")
                     val inst = Instrumentation()
-                    inst.sendKeyDownUpSync(KeyCode)
+                    inst.sendKeyDownUpSync(keyCode)
                 } catch (e1: Exception) {
                     Log.e("Exception ", e1.toString())
                 }
@@ -111,3 +117,5 @@ class PowerButtonService : Service() {
         }.start()
     }
 }
+
+// todo: this requires root permission or make my app a system app

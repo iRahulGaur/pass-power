@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup">
-        <activity android:name=".MainActivity">
+        <activity android:name=".home.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,7 +22,7 @@
         </activity>
 
         <service
-            android:name=".PowerButtonService"
+            android:name=".service.PowerButtonService"
             android:enabled="true"
             android:exported="true"
             tools:ignore="ExportedService" />
